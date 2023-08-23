@@ -3,10 +3,11 @@ const {
   login,
   register,
   getAllUsers,
-  setAvatar,
+  setProfilePicture,
   logOut,
-} = require('../controllers/userController')
+} = require('../controllers/register-loginController')
 
 router.route('/register').post(register);
 router.route('/login').post(login)
+router.route('/setProfilePicture').post(setProfilePicture);
 module.exports= router;
