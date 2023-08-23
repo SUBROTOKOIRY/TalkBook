@@ -1,10 +1,12 @@
 const express=require('express');
 const cors=require('cors');
-const mongoose=require('mongoose');
 const app=express();
 const connectDb = require('./model/connect');
 require('dotenv').config();
 const userRoute=require('./routes/userRoutes')
+var bodyParser = require('body-parser')
+
+app.use(bodyParser.json({ limit: '500kb' }))
 
 const port=process.env.PORT || 5000;
 const uri=process.env.MONGO_URL;

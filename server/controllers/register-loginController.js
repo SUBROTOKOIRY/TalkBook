@@ -32,28 +32,28 @@ const login = async (req, res) => {
   try {
     const { username,email, password } = req.body
 
-    const userNameCheck = await User.findOne({ username })
-    if (!userNameCheck) {
+    const user = await User.findOne({ username })
+    if (!user) {
       return res.json({ msg: 'Invalid Username ', status: false })
     }
-    const checkEmail=await userNameCheck.email;
+    const checkEmail=await user.email;
     if (checkEmail!==email) {
         console.log(email);
       return res.json({ msg: 'Invalid emailId', status: false })
     }
-    const checkPassword = await bcrypt.compare(password, userNameCheck.password);
+    const checkPassword = await bcrypt.compare(password, user.password);
     if(!checkPassword)
     {
         return res.json({msg:"Invalid Password",status:false})
     }
 
-    // delete user.password;
-    console.log("success");
-    return res.json({ status: true})
+     delete password;
+    return res.json({ status: true,user})
 } catch (error) {
     console.log(error)
 }
 }
+
 module.exports={
     register,
     login

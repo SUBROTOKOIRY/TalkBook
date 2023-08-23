@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Register from './pages/Register'
 import Login from './pages/Login'
+import SetAvatar from './components/setProfilePicture'
 import Chat from './pages/Chat'
 function App() {
   return (
@@ -9,7 +10,8 @@ function App() {
       <Routes>
         <Route path="/Register" element={<Register />} />
         <Route path="/Login" element={<Login />} />
-        <Route path="/" element={<Chat />} />
+        <Route path="/setProfilePicture" element={<SetAvatar />} />
+        <Route path='/' element={<Chat/>} />
         <Route path="*" element={<h1>Not Found</h1>} />
       </Routes>
     </BrowserRouter>
