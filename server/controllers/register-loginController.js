@@ -54,7 +54,20 @@ const login = async (req, res) => {
 }
 }
 
+const getAllUsers=async(req,res)=>{
+    try{
+        const users=await User.find({_id:{$ne:req.params.id}}).select([
+            "username","email","profilePicture","id"
+        ]);
+        return res.json(users);
+    }
+    catch(error){
+        console.log(error);
+    }
+}
+
 module.exports={
     register,
-    login
+    login,
+    getAllUsers
 }

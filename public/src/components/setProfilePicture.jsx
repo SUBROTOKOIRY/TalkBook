@@ -34,7 +34,6 @@ const SetAvatar = () => {
             data.push(buffer.toString('base64'))
           }
         }
-        console.log(data.length)
         setAvatars(data)
         setIsLoading(false)
       } catch (error) {
@@ -63,20 +62,20 @@ const SetAvatar = () => {
             const user = await JSON.parse(
               localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
             );
-            console.log(user._id);
+            // console.log(user._id);
         // const{data}=await axios.post(`${setAvatarsRoute}/${user._id}`,{image:avatars[selectedAvatar]});
        try {
          const { data } = await axios.post(`${setAvatarsRoute}/${user._id}`, {
            image: avatars[selectedAvatar],
          })
          // Handle successful response
-
-         console.log('hello')
+         console.log(data)
          if (data.status === false) {
            toast.error(data.msg, toastOptions)
          } else {
-           user.isAvatarImageSet = true
-           user.avatarImage = data.profilePicture
+           user.isProfilePictureSet = data.isSet;
+           user.profilePicture = data.image;
+          //  console.log(data.profilePicture)
            localStorage.setItem(
              process.env.REACT_APP_LOCALHOST_KEY,
              JSON.stringify(user)
