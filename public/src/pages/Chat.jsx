@@ -28,7 +28,7 @@ const Chat = () => {
               const fetchData=async()=>{
                 const data=await axios.get(`${allUsersRoute}/${currentUser._id}`)
                 setContacts(data.data);
-                console.log(data.data);
+
               }
               fetchData();
             }
@@ -38,7 +38,6 @@ const Chat = () => {
 
   const handleChatChange=(chat)=>{
     setCurrentChat(chat);
-    console.log(chat);
   }
   return (
     <Container>
