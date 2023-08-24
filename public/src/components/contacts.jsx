@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import logo from '../assets/logo.svg'
 import { useState,useEffect } from 'react'
-function Contacts(contacts,currentUser) {
+function Contacts(props) {
     const [currentSelected,setCurrentSelected]=useState(undefined);
     const [currentUsername,setCurrentUsername]=useState(undefined);
     const [currentProfilePicture,setCurrentProfilePicture]=useState(undefined);
@@ -15,6 +15,7 @@ function Contacts(contacts,currentUser) {
     },)
     const changeCurrentChat=(index,contact)=>{
         setCurrentSelected(index);
+        props.changeChat(contact);
     }
   return (
     <>
@@ -25,7 +26,7 @@ function Contacts(contacts,currentUser) {
             <h3>snappy</h3>
           </div>
           <div className="contacts">
-            {contacts.contacts.map((contact, index) => {
+            {props.contacts.map((contact, index) => {
               return (
                 <div
                   key={contact._id}

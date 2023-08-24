@@ -4,10 +4,13 @@ import { allUsersRoute } from '../utills/ApiRouter'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Contacts from '../components/contacts'
+import Welcome from '../components/welcome'
+import ChatContainer from '../components/chatContainer'
 const Chat = () => {
   const navigate = useNavigate();
   const [currentUser,setCurrentUser]=useState(undefined);
   const [contacts,setContacts]=useState([]);
+  const [currentChat,setCurrentChat]=useState(undefined);
   useEffect(() => {
     if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY) === null) {
       navigate('/login')
@@ -33,11 +36,23 @@ const Chat = () => {
       }
   },[currentUser,navigate])
 
+  const handleChatChange=(chat)=>{
+    setCurrentChat(chat);
+    console.log(chat);
+  }
   return (
     <Container>
       <div className="container">
-        <Contacts contacts={contacts} currentUser={currentUser}/>
-        console.log(currentUser)
+        <Contacts
+          contacts={contacts}
+          currentUser={currentUser}
+          changeChat={handleChatChange}
+        />
+        {currentChat === undefined ? (
+          <Welcome />
+        ) : (
+          <ChatContainer currentChat={currentChat}  />
+        )}
       </div>
     </Container>
   )
