@@ -21,7 +21,6 @@ const handleSubmit=async(e)=>{
   e.preventDefault();
   try{
     if(handleValidation()){
-    console.log("hello")
     const {username ,email ,password} = values;
     const {data} = await axios.post(registerRoute,{username,email,password});
     if(data.status===false)

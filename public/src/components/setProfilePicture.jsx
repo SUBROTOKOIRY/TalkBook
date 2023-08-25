@@ -6,7 +6,7 @@ import { ToastContainer,toast } from "react-toastify";
 import loader from "../assets/loader.gif";
 import axios from "axios";
 import { Buffer } from "buffer";
-import { setAvatarsRoute } from "../utills/ApiRouter";
+import { setProfilePictureRoute } from "../utills/ApiRouter";
 
 const SetAvatar = () => {
     const [avatars, setAvatars] = useState([]);
@@ -62,14 +62,12 @@ const SetAvatar = () => {
             const user = await JSON.parse(
               localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
             );
-            // console.log(user._id);
         // const{data}=await axios.post(`${setAvatarsRoute}/${user._id}`,{image:avatars[selectedAvatar]});
        try {
-         const { data } = await axios.post(`${setAvatarsRoute}/${user._id}`, {
+         const { data } = await axios.post(`${setProfilePictureRoute}/${user._id}`, {
            image: avatars[selectedAvatar],
          })
          // Handle successful response
-         console.log(data)
          if (data.status === false) {
            toast.error(data.msg, toastOptions)
          } else {

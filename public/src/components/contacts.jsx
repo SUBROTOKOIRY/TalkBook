@@ -12,7 +12,7 @@ function Contacts(props) {
         
         setCurrentUsername(data.username);
         setCurrentProfilePicture(data.profilePicture);
-    },)
+    },[])
     const changeCurrentChat=(index,contact)=>{
         setCurrentSelected(index);
         props.changeChat(contact);

@@ -3,9 +3,9 @@ import styled from 'styled-components'
 import { allUsersRoute } from '../utills/ApiRouter'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import Contacts from '../components/contacts'
-import Welcome from '../components/welcome'
-import ChatContainer from '../components/chatContainer'
+import Contacts from '../components/Contacts'
+import Welcome from '../components/Welcome'
+import ChatContainer from '../components/ChatContainer'
 const Chat = () => {
   const navigate = useNavigate();
   const [currentUser,setCurrentUser]=useState(undefined);
