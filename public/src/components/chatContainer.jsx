@@ -1,7 +1,50 @@
-import React from 'react'
+import {useState,useEffect} from 'react'
 import styled from 'styled-components'
 import Logout from './Logout'
-const ChatContainer=(props)=> {
+import ChatInput from './ChatInput'
+import Message from './Message'
+import axios from 'axios'
+import {getAllMsgsRoute} from '../utills/ApiRouter'
+import {addMsgRoute} from '../utills/ApiRouter' //mistake, i was writing addMsgRoute only without curly braces 
+const ChatContainer = (props) => {
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    const allMsgs=async()=>{
+      try{
+        const res=await axios.post(getAllMsgsRoute,{
+          from:props.currentUser._id,
+          to:props.currentChat._id
+        })
+          console.log(res.data.pastMessages)
+          if(res.data.status===true){
+            setMessages(res.data.pastMessages)
+          }
+          else{
+            console.log(res.data.msg)
+          }
+      }
+      catch(err){
+        console.log(err)
+      }
+    }
+    allMsgs();
+  },[props.currentChat])
+
+  const handleSendMsg = async (msg) => {
+    try{
+    console.log(msg)
+    const res =await axios.post(addMsgRoute, {
+      from: props.currentUser._id,
+      to: props.currentChat._id,
+      text: msg,
+    })
+    console.log(res.data.msg)  //mistake, i was writing res.msg
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
   return (
     <Container>
       <div className="chat-header">
@@ -18,24 +61,25 @@ const ChatContainer=(props)=> {
         </div>
         <Logout />
       </div>
-      {/* <div className="chat-messages">
+      
+      <div className="chat-messages">
         {messages.map((message) => {
           return (
-            <div ref={scrollRef} key={uuidv4()}>
+            <div >
               <div
                 className={`message ${
-                  message.fromSelf ? 'sended' : 'recieved'
+                  message.fromSender ? 'sended' : 'received'
                 }`}
               >
                 <div className="content ">
-                  <p>{message.message}</p>
+                  <p>{message.text}</p>
                 </div>
               </div>
             </div>
           )
         })}
-      </div> */}
-      {/* <ChatInput handleSendMsg={handleSendMsg} /> */}
+      </div>
+      <ChatInput handleSendMsg={handleSendMsg} />
     </Container>
   )
 }
@@ -81,6 +125,7 @@ const Container = styled.div`
         background-color: #ffffff39;
         width: 0.1rem;
         border-radius: 1rem;
+        overflow-y: auto;
       }
     }
     .message {
@@ -104,7 +149,7 @@ const Container = styled.div`
         background-color: #4f04ff21;
       }
     }
-    .recieved {
+    .received {
       justify-content: flex-start;
       .content {
         background-color: #9900ff20;
@@ -112,4 +157,4 @@ const Container = styled.div`
     }
   }
 `
-export default ChatContainer;
+export default ChatContainer

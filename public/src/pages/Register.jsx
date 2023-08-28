@@ -1,73 +1,73 @@
 import React, { useState } from 'react'
-import {useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'
 import styled from 'styled-components'
 import logo from '../assets/logo.svg'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import axios from 'axios';
-import {registerRoute} from '../utills/ApiRouter'
+import axios from 'axios'
+import { registerRoute } from '../utills/ApiRouter'
 function Register() {
   const [values, setValues] = useState({
     username: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
   })
-  const navigate=useNavigate();
+  const navigate = useNavigate()
   const handleChange = (e) => {
-    setValues({...values,[e.target.name]:e.target.value});
+    setValues({ ...values, [e.target.name]: e.target.value })
   }
-const handleSubmit=async(e)=>{
-  e.preventDefault();
-  try{
-    if(handleValidation()){
-    const {username ,email ,password} = values;
-    const {data} = await axios.post(registerRoute,{username,email,password});
-    if(data.status===false)
-    {
-       toast.error(data.msg,toastOptions);
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      if (handleValidation()) {
+        const { username, email, password } = values
+        const { data } = await axios.post(registerRoute, {
+          username,
+          email,
+          password,
+        })
+        if (data.status === false) {
+          toast.error(data.msg, toastOptions)
+        }
+        if (data.status === true) {
+          localStorage.setItem(
+            process.env.REACT_APP_LOCALHOST_KEY,
+            JSON.stringify(data.user)
+          )
+          navigate('/')
+        }
+      }
+    } catch (error) {
+      console.log(error)
     }
-    if(data.status===true)
-    {
-      localStorage.setItem(
-          process.env.REACT_APP_LOCALHOST_KEY,
-          JSON.stringify(data.user)
-        );
-      navigate('/');
+  }
+  const toastOptions = {
+    position: 'top-center',
+    autoClose: 5000,
+    theme: 'outline',
+    draggable: true,
+  }
+  const handleValidation = () => {
+    const { username, email, password, confirmPassword } = values
+    if (password !== confirmPassword) {
+      toast.error('Password and Confirm Password should be same', toastOptions)
+      return false
     }
+    if (username.length < 4) {
+      toast.error('username should be more than 3 characters', toastOptions)
+      return false
+    }
+    if (password.length < 8) {
+      toast.error('Password length should be greater than 8', toastOptions)
+      return false
+    }
+    if (!email.includes('@') || email === '') {
+      toast.error('Invalid Email', toastOptions)
+      return false
+    }
+    return true
   }
-}
-catch(error)
-{
-  console.log(error)
-}
-}
-const toastOptions={
-  position: "top-center",
-  autoClose: 5000,
-  theme:"outline",
-  draggable: true
-}
-const handleValidation=()=>{
-  const {username ,email ,password,confirmPassword} = values;
-  if(password!==confirmPassword){
-      toast.error("Password and Confirm Password should be same",toastOptions);
-      return false;
-  }
-  if (username.length < 4) {
-    toast.error('username should be more than 3 characters', toastOptions)
-    return false;
-  }
-  if (password.length<8) {
-    toast.error('Password length should be greater than 8', toastOptions)
-    return false;
-  }
-  if(!email.includes("@") || email===""){
-    toast.error('Invalid Email', toastOptions)
-    return false;
-  }
-  return true;
-}
   return (
     <>
       <FormContainer>

@@ -4,6 +4,7 @@ const app=express();
 const connectDb = require('./model/connect');
 require('dotenv').config();
 const userRoute=require('./routes/userRoutes')
+const messageRoutes=require('./routes/messageRoutes')
 var bodyParser = require('body-parser')
 
 app.use(bodyParser.json({ limit: '500kb' }))
@@ -15,8 +16,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use('/api/auth',userRoute);
+app.use('/api/msg',messageRoutes);
 
-app.listen(port,async()=>{   
+const server=app.listen(port,async()=>{   
     await connectDb(uri)
     console.log(`Server is running on port: ${port}`);
 });
+
