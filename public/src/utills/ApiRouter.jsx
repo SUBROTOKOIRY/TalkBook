@@ -11,5 +11,6 @@ module.exports={
     setProfilePictureRoute,
     allUsersRoute,
     addMsgRoute,
-    getAllMsgsRoute
+    getAllMsgsRoute,
+    host
 }

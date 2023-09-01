@@ -6,6 +6,7 @@ require('dotenv').config();
 const userRoute=require('./routes/userRoutes')
 const messageRoutes=require('./routes/messageRoutes')
 var bodyParser = require('body-parser')
+const socket = require('socket.io')
 
 app.use(bodyParser.json({ limit: '500kb' }))
 
@@ -23,3 +24,28 @@ const server=app.listen(port,async()=>{
     console.log(`Server is running on port: ${port}`);
 });
 
+const io = socket(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+    credentials: true,
+  },
+})
+
+global.onlineUsers = new Map([]);
+io.on('connection', (socket) => {
+  global.chatSocket = socket;
+  socket.on('add-user', (userId) => {
+    console.log('user added');
+    onlineUsers.set(userId, socket.id);
+  })
+  
+  socket.on('send-msg', (data) => {
+    console.log('msg added')
+    const sendUserSocket = onlineUsers.get(data.to)
+    console.log(onlineUsers)
+    if (sendUserSocket) {
+      socket.to(sendUserSocket).emit('msg-receive', data.text)
+      console.log('msg sent')
+    }
+  })
+})

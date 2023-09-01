@@ -1,22 +1,29 @@
-import {useState,useEffect} from 'react'
+import {useState,useEffect,useRef} from 'react'
 import styled from 'styled-components'
 import Logout from './Logout'
 import ChatInput from './ChatInput'
 import Message from './Message'
 import axios from 'axios'
 import {getAllMsgsRoute} from '../utills/ApiRouter'
+import { v4 as uuidv4 } from 'uuid';
 import {addMsgRoute} from '../utills/ApiRouter' //mistake, i was writing addMsgRoute only without curly braces 
+
+
 const ChatContainer = (props) => {
   const [messages, setMessages] = useState([]);
+  const [arrivalMessage, setArrivalMessage] = useState(null);
+ 
+  const scrollRef = useRef();
 
+            //getting all the chats between the two users(currentUser and CurrentChat)
   useEffect(() => {
     const allMsgs=async()=>{
-      try{
+      if(props.currentChat)
+      {
         const res=await axios.post(getAllMsgsRoute,{
           from:props.currentUser._id,
           to:props.currentChat._id
         })
-          console.log(res.data.pastMessages)
           if(res.data.status===true){
             setMessages(res.data.pastMessages)
           }
@@ -24,27 +31,52 @@ const ChatContainer = (props) => {
             console.log(res.data.msg)
           }
       }
-      catch(err){
-        console.log(err)
-      }
     }
     allMsgs();
   },[props.currentChat])
 
   const handleSendMsg = async (msg) => {
     try{
-    console.log(msg)
-    const res =await axios.post(addMsgRoute, {
-      from: props.currentUser._id,
-      to: props.currentChat._id,
-      text: msg,
-    })
-    console.log(res.data.msg)  //mistake, i was writing res.msg
+      
+      await axios.post(addMsgRoute, {
+        from: props.currentUser._id,
+        to: props.currentChat._id,
+        text: msg,
+      })
+
+       //sending msg to socket.io server
+      props.socketRef.current.emit('send-msg',{
+      from:props.currentUser._id,
+      to:props.currentChat._id,
+      text:msg
+      });
+
+        const msgs = [...messages]
+        msgs.push({ fromSender: true, text: msg })
+        setMessages(msgs)
+    // console.log(res.data.msg)  //mistake, i was writing res.msg
     }
     catch(err){
       console.log(err)
     }
   }
+  useEffect(() => {
+     if (props.socketRef.current) {
+       props.socketRef.current.on('msg-receive', (msg) => {
+         setArrivalMessage({ fromSender: false, text: msg })
+        })
+        console.log("msg received");
+     }
+  }, []);
+
+   useEffect(() => {
+     arrivalMessage && setMessages((prev) => [...prev, arrivalMessage])
+   }, [arrivalMessage])
+
+   useEffect(() => {
+     scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
+   }, [messages])
+
   return (
     <Container>
       <div className="chat-header">
@@ -65,7 +97,7 @@ const ChatContainer = (props) => {
       <div className="chat-messages">
         {messages.map((message) => {
           return (
-            <div >
+            <div ref={scrollRef} key={uuidv4()}>
               <div
                 className={`message ${
                   message.fromSender ? 'sended' : 'received'

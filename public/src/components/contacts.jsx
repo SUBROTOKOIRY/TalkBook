@@ -23,7 +23,7 @@ function Contacts(props) {
         <Container>
           <div className="brand">
             <img src={logo} alt="logo" />
-            <h3>snappy</h3>
+            <h3>TalkBook</h3>
           </div>
           <div className="contacts">
             {props.contacts.map((contact, index) => {
