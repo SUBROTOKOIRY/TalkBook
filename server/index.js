@@ -35,17 +35,16 @@ global.onlineUsers = new Map([]);
 io.on('connection', (socket) => {
   global.chatSocket = socket;
   socket.on('add-user', (userId) => {
-    console.log('user added');
+    // console.log('user added');
     onlineUsers.set(userId, socket.id);
   })
   
   socket.on('send-msg', (data) => {
-    console.log('msg added')
+    // console.log('msg added')
     const sendUserSocket = onlineUsers.get(data.to)
-    console.log(onlineUsers)
+    // console.log(onlineUsers)
     if (sendUserSocket) {
       socket.to(sendUserSocket).emit('msg-receive', data.text)
-      console.log('msg sent')
     }
   })
 })

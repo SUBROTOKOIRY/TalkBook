@@ -10,7 +10,7 @@ const ChatInput = (props) => {
     const handleEmojiPicker = (e) => {
         setShowEmojiPicker(!showEmojiPicker);
     }
-    const handleEmojiClick=(event,emojiObject)=>{
+    const handleEmojiClick=(emojiObject)=>{
         let message=msg;
         message+=emojiObject.emoji;
         setmsg(message);
@@ -63,7 +63,7 @@ const Container = styled.div`
       }
       .EmojiPickerReact {
         position: absolute;
-        top: 40px;
+        top: -470px;
         background-color: #080420;
         box-shadow: 0 5px 10px #9a86f3;
         border-color: #9a86f3;

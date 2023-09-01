@@ -16,14 +16,17 @@ const SetAvatar = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
+      const isUserLoggedIn = await JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY));
+      if(isUserLoggedIn)
+      {
+        try {
         const apiKey = process.env.YOUR_API_KEY // Replace with your actual API key
         const apiUrl = `https://api.multiavatar.com/Starcrasher.png?apikey=${apiKey}`
 
         const data = []
         for (let i = 0; i < 4; i++) {
           const response = await axios.get(
-            `${apiUrl}/${Math.floor(Math.random() * 1000)}`,
+            `${apiUrl}/${Math.floor((Math.random() * 1000)+1)}`,
             {
               responseType: 'arraybuffer', // Important for handling binary data
             }
@@ -40,6 +43,10 @@ const SetAvatar = () => {
         console.error('Error fetching images:', error)
         // Handle the error as needed
       }
+    }
+    else{
+      navigate('/')
+    }
     }
 
     fetchData()
@@ -78,7 +85,8 @@ const SetAvatar = () => {
              process.env.REACT_APP_LOCALHOST_KEY,
              JSON.stringify(user)
            )
-           navigate('/')
+           localStorage.clear();
+           navigate('/Login')
          }
        } catch (error) {
          console.error('Error making POST request:', error)

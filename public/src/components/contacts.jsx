@@ -10,8 +10,11 @@ function Contacts(props) {
     useEffect(() => {
        const data=JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY));
         
-        setCurrentUsername(data.username);
-        setCurrentProfilePicture(data.profilePicture);
+        if(data)
+        {
+          setCurrentUsername(data.username)
+          setCurrentProfilePicture(data.profilePicture)
+        }
     },[])
     const changeCurrentChat=(index,contact)=>{
         setCurrentSelected(index);

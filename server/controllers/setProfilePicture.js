@@ -13,7 +13,7 @@ const setProfilePicture=async(req,res,next)=>{
           { new: true }
         )
     delete userData.password;
-    console.log(userData);
+    // console.log(userData);
     return res.json({
       isSet: userData.isProfilePictureSet,
       image: userData.profilePicture,

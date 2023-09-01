@@ -21,7 +21,7 @@ const Chat = () => {
     try{
       socketRef.current = io(host);
       socketRef.current.emit('add-user', currentUser._id)
-      console.log('connecting to socket.io server')
+      // console.log('connecting to socket.io server')
     }
     catch(err){ 
       console.log(err)
@@ -31,12 +31,13 @@ const Chat = () => {
 
   useEffect(() => {
     if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY) === null) {
+      console.log('user not logged in')
       navigate('/login')
     }
     else{
       setCurrentUser(JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)))
     }
-  },[navigate])
+  },[])
   useEffect(() => {
       if(currentUser)
       {

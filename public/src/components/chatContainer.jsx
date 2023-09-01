@@ -65,7 +65,7 @@ const ChatContainer = (props) => {
        props.socketRef.current.on('msg-receive', (msg) => {
          setArrivalMessage({ fromSender: false, text: msg })
         })
-        console.log("msg received");
+        // console.log("msg received");
      }
   }, []);
 
